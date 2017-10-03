@@ -56,6 +56,9 @@ class GameBoard(object):
         self.is_setup = False
 
     def __count_tiles(self):
+        self.count_black_tiles = 0
+        self.count_white_tiles = 0
+        self.count_blank_tiles = 0
         for row in self.board_tiles:
             for tile in row:
                 if str(tile) == BLANK_PIECE:
@@ -194,7 +197,7 @@ class GameBoard(object):
         return None
 
     def __bottom_left_tile(self, x, y):
-        if not x - 1 < 0 and not y - 1 < 0:
+        if not x + 1 > self.MAX_X and not y - 1 < 0:
             return self.board_tiles[x + 1][y - 1]
         return None
 
