@@ -1,4 +1,4 @@
-BLANK_PIECE = '_'
+BLANK_PIECE = ' '
 BLACK_PIECE = 'B'
 WHITE_PIECE = 'W'
 INTERSECTION = '+'
@@ -112,37 +112,36 @@ class GameBoard(object):
             return False
 
     def verify_placement(self, tile, flip=False):
+
         if self.__verify_upper_bounds(tile, flip=flip):
             return True
+
+        elif self.__verify_upper_diagonal_bounds(tile, flip=flip):
+            return True
+
         elif self.__verify_lower_bounds(tile, flip=flip):
             return True
+
+        elif self.__verify_lower_diagonal_bounds(tile, flip=flip):
+            return True
+
         elif self.__verify_left_bound(tile, flip=flip):
             return True
+
         elif self.__verify_right_bound(tile, flip=flip):
             return True
+
         return False
 
     def __verify_upper_bounds(self, tile, flip=False):
         if self.__upper_tile(tile.x, tile.y) is not None and self.__upper_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_tile, flip=flip)
 
-        if self.__upper_left_tile(tile.x, tile.y) is not None and self.__upper_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_left_tile, flip=flip)
-
-        if self.__upper_right_tile(tile.x, tile.y) is not None and self.__upper_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_right_tile, flip=flip)
-
         return False
 
     def __verify_lower_bounds(self, tile, flip=False):
         if self.__bottom_tile(tile.x, tile.y) is not None and self.__bottom_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_tile, flip=flip)
-
-        if self.__bottom_left_tile(tile.x, tile.y) is not None and self.__bottom_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_left_tile, flip=flip)
-
-        if self.__bottom_right_tile(tile.x, tile.y) is not None and self.__bottom_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_right_tile, flip=flip)
 
         return False
 
@@ -155,6 +154,24 @@ class GameBoard(object):
     def __verify_right_bound(self, tile, flip=False):
         if self.__right_tile(tile.x, tile.y) is not None and self.__right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__right_tile, flip=flip)
+
+        return False
+
+    def __verify_upper_diagonal_bounds(self, tile, flip=False):
+        if self.__upper_left_tile(tile.x, tile.y) is not None and self.__upper_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_left_tile, flip=flip)
+
+        if self.__upper_right_tile(tile.x, tile.y) is not None and self.__upper_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_right_tile, flip=flip)
+
+        return False
+
+    def __verify_lower_diagonal_bounds(self, tile, flip=False):
+        if self.__bottom_left_tile(tile.x, tile.y) is not None and self.__bottom_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_left_tile, flip=flip)
+
+        if self.__bottom_right_tile(tile.x, tile.y) is not None and self.__bottom_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_right_tile, flip=flip)
 
         return False
 
@@ -230,7 +247,8 @@ class GameBoard(object):
         return str(self.board_tiles)
 
     def __str__(self):
-        board = '    0   1   2   3   4   5   6   7\n'
+        white_space = ' ' * 3
+        board = '    ' + white_space.join([str(x) for x in range(self.MAX_X)]) + '\n'
         board += '  ' + GRID * len(self.board_tiles[0]) + INTERSECTION + '\n'
         for i, row in enumerate(self.board_tiles):
             board += str(i) + ' |'
