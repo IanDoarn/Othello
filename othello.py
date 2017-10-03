@@ -4,7 +4,7 @@ from colorama import init, Fore
 
 
 if __name__ == '__main__':
-    game = GameBoard(dimensions=6)
+    game = GameBoard(dimensions=4)
     game.setup()
 
     init(autoreset=True)
@@ -24,7 +24,12 @@ if __name__ == '__main__':
         if game.add_tile(x, y, current_piece):
             system('cls')
             print(Fore.LIGHTWHITE_EX + str(game))
-            game.game_state()
             current_piece = game.opposite(current_piece)
+            if game.game_state(current_piece):
+                continue
+            else:
+                if game.is_setup:
+                    print("{} Has no possible moves!".format(current_piece))
+                current_piece = game.opposite(current_piece)
         else:
             print("Invalid move: x:{} y:{}".format(str(x), str(y)))

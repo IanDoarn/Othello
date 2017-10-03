@@ -12,6 +12,9 @@ class GameBoard(object):
         if dimensions % 2 != 0:
             raise ValueError('dimensions must be even.')
 
+        if dimensions == 2:
+            raise ValueError('dimensions must be >= 4.')
+
         self.MAX_X = dimensions
         self.MAX_Y = dimensions
 
@@ -74,18 +77,20 @@ class GameBoard(object):
                 if str(tile) == BLANK_PIECE:
                     self.blank_pieces.append([tile.x, tile.y])
 
-    def _get_board_tile(self, x, y):
-        return self.board_tiles[x][y]
+    def __check_if_has_moves(self, piece):
+        self.__find_blank_tiles()
+        temp = []
+        for tile in self.blank_pieces:
+            x, y = tile[0], tile[1]
+            temp.append(self.verify_placement(Tile(position=[x, y], tile=piece)))
+        return any(temp)
 
-    def _set_board_tile(self, x, y, item):
-        self.board_tiles[x][y] = item
-
-    def game_state(self):
+    def game_state(self, current_piece):
         self.__find_blank_tiles()
         self.__count_tiles()
         winner = None
 
-        if not self.count_blank_tiles > 0:
+        if self.count_blank_tiles == 0:
             if self.count_black_tiles > self.count_white_tiles:
                 winner = BLACK_PIECE
             elif self.count_black_tiles < self.count_white_tiles:
@@ -96,8 +101,11 @@ class GameBoard(object):
                 str(self.count_black_tiles),
                 WHITE_PIECE, str(self.count_white_tiles)
             ))
-
             self.reset_game()
+
+        else:
+            return self.__check_if_has_moves(current_piece)
+        return self.__check_if_has_moves(current_piece)
 
     def add_tile(self, y, x, piece, flip=True):
         if str(self.board_tiles[x][y]) == BLANK_PIECE:
