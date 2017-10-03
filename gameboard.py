@@ -103,11 +103,15 @@ class GameBoard(object):
         if self.board_tiles[x][y].state == BLANK_PIECE:
             tile = Tile(position=[x, y], tile=piece)
             while self.verify_placement(tile, flip=flip):
-                print("Valid: x:{} y:{}".format(str(y), str(x)))
+                # print("Valid: x:{} y:{}".format(str(y), str(x)))
                 self.board_tiles[x][y] = tile
+                print("Valid: x:{} y:{}".format(str(y), str(x)))
+            if self.board_tiles[x][y] == tile:
+                return True
+            else:
+                return False
         else:
             return False
-        return True
 
     def verify_placement(self, tile, flip: bool = False):
         if self.__right_tile(tile.x, tile.y) is not None and self.__right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
@@ -116,11 +120,11 @@ class GameBoard(object):
         elif self.__left_tile(tile.x, tile.y) is not None and self.__left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__left_tile, flip=flip)
 
-        elif self.__upper_tile(tile.x, tile.y) is not None and self.__upper_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_tile, flip=flip)
-
         elif self.__bottom_tile(tile.x, tile.y) is not None and self.__bottom_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_tile, flip=flip)
+
+        elif self.__upper_tile(tile.x, tile.y) is not None and self.__upper_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_tile, flip=flip)
 
         elif self.__upper_right_tile(tile.x, tile.y) is not None and self.__upper_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_right_tile, flip=flip)
@@ -150,7 +154,7 @@ class GameBoard(object):
                 tile_list.append(tile)
                 tile = direction(tile.x, tile.y)
         if len(tile_list) >= 3:
-            print([str(i) for i in tile_list])
+            # print([str(i) for i in tile_list])
             if tile_list[0].state == piece and tile_list[len(tile_list) - 1].state == piece:
                 for t in tile_list:
                     if self.opposite(t.state) == piece:
