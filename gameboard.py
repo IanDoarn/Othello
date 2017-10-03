@@ -167,42 +167,42 @@ class GameBoard(object):
         return BLACK_PIECE if piece == WHITE_PIECE else WHITE_PIECE
 
     def __right_tile(self, x, y):
-        if not x + 1 > self.MAX_X - 1:
+        if not y + 1 > self.MAX_Y - 1:
             return self.board_tiles[x][y + 1]
         return None
 
     def __left_tile(self, x, y):
-        if not x - 1 < 0:
+        if not y - 1 < 0:
             return self.board_tiles[x][y - 1]
         return None
 
     def __bottom_tile(self, x, y):
-        if not y - 1 < 0:
+        if not x + 1 > self.MAX_X - 1:
             return self.board_tiles[x + 1][y]
         return None
 
     def __upper_tile(self, x, y):
-        if not y + 1 > self.MAX_Y - 1:
+        if not x - 1 < 0:
             return self.board_tiles[x - 1][y]
         return None
 
     def __upper_left_tile(self, x, y):
-        if not x - 1 < 0 and not y + 1 > self.MAX_Y - 1:
+        if not x - 1 < 0 and not y - 1 < 0:
             return self.board_tiles[x - 1][y - 1]
         return None
 
     def __upper_right_tile(self, x, y):
-        if not x + 1 > self.MAX_X - 1 and not y + 1 > self.MAX_Y - 1:
+        if not x - 1 < 0 and not y + 1 > self.MAX_Y - 1:
             return self.board_tiles[x - 1][y + 1]
         return None
 
     def __bottom_left_tile(self, x, y):
-        if not x + 1 > self.MAX_X and not y - 1 < 0:
+        if not x + 1 > self.MAX_X - 1 and not y - 1 < 0:
             return self.board_tiles[x + 1][y - 1]
         return None
 
     def __bottom_right_tile(self, x, y):
-        if not x + 1 > self.MAX_X and not y + 1 > self.MAX_Y - 1:
+        if not x + 1 > self.MAX_X - 1 and not y + 1 > self.MAX_Y - 1:
             return self.board_tiles[x + 1][y + 1]
         return None
 

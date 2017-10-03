@@ -1,4 +1,4 @@
-from gameboard import GameBoard, BLACK_PIECE, WHITE_PIECE
+from gameboard import GameBoard, BLACK_PIECE
 from os import system
 from colorama import init, Fore
 
