@@ -1,6 +1,20 @@
-from gameboard import GameBoard, BLACK_PIECE
+from gameboard import GameBoard, BLACK_PIECE, WHITE_PIECE
 from os import system
 from colorama import init, Fore
+
+
+# if __name__ == '__main__':
+#     game = GameBoard()
+#     game.setup()
+#
+#     game.add_tile(4, 5, BLACK_PIECE)
+#     print(game)
+#     game.add_tile(5, 5, WHITE_PIECE)
+#     print(game)
+#     game.add_tile(5, 4, BLACK_PIECE)
+#     print(game)
+#     game.add_tile(5, 3, WHITE_PIECE)
+#     print(game)
 
 if __name__ == '__main__':
     game = GameBoard()

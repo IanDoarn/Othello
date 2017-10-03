@@ -100,12 +100,10 @@ class GameBoard(object):
             self.reset_game()
 
     def add_tile(self, y, x, piece, flip=True):
-        if self.board_tiles[x][y].state == BLANK_PIECE:
+        if str(self.board_tiles[x][y]) == BLANK_PIECE:
             tile = Tile(position=[x, y], tile=piece)
             while self.verify_placement(tile, flip=flip):
-                # print("Valid: x:{} y:{}".format(str(y), str(x)))
                 self.board_tiles[x][y] = tile
-                print("Valid: x:{} y:{}".format(str(y), str(x)))
             if self.board_tiles[x][y] == tile:
                 return True
             else:
@@ -113,34 +111,52 @@ class GameBoard(object):
         else:
             return False
 
-    def verify_placement(self, tile, flip: bool = False):
+    def verify_placement(self, tile, flip=False):
+        if self.__verify_upper_bounds(tile, flip=flip):
+            return True
+        elif self.__verify_lower_bounds(tile, flip=flip):
+            return True
+        elif self.__verify_left_bound(tile, flip=flip):
+            return True
+        elif self.__verify_right_bound(tile, flip=flip):
+            return True
+        return False
 
+    def __verify_upper_bounds(self, tile, flip=False):
+        if self.__upper_tile(tile.x, tile.y) is not None and self.__upper_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_tile, flip=flip)
+
+        if self.__upper_left_tile(tile.x, tile.y) is not None and self.__upper_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_left_tile, flip=flip)
+
+        if self.__upper_right_tile(tile.x, tile.y) is not None and self.__upper_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_right_tile, flip=flip)
+
+        return False
+
+    def __verify_lower_bounds(self, tile, flip=False):
+        if self.__bottom_tile(tile.x, tile.y) is not None and self.__bottom_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_tile, flip=flip)
+
+        if self.__bottom_left_tile(tile.x, tile.y) is not None and self.__bottom_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_left_tile, flip=flip)
+
+        if self.__bottom_right_tile(tile.x, tile.y) is not None and self.__bottom_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_right_tile, flip=flip)
+
+        return False
+
+    def __verify_left_bound(self, tile, flip=False):
+        if self.__left_tile(tile.x, tile.y) is not None and self.__left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
+            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__left_tile, flip=flip)
+
+        return False
+
+    def __verify_right_bound(self, tile, flip=False):
         if self.__right_tile(tile.x, tile.y) is not None and self.__right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
             return self.__scan_tiles(tile.x, tile.y, tile.state, self.__right_tile, flip=flip)
 
-        elif self.__upper_right_tile(tile.x, tile.y) is not None and self.__upper_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_right_tile, flip=flip)
-
-        elif self.__upper_tile(tile.x, tile.y) is not None and self.__upper_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_tile, flip=flip)
-
-        elif self.__upper_left_tile(tile.x, tile.y) is not None and self.__upper_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__upper_left_tile, flip=flip)
-
-        elif self.__left_tile(tile.x, tile.y) is not None and self.__left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__left_tile, flip=flip)
-
-        elif self.__bottom_left_tile(tile.x, tile.y) is not None and self.__bottom_left_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_left_tile, flip=flip)
-
-        elif self.__bottom_tile(tile.x, tile.y) is not None and self.__bottom_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_tile, flip=flip)
-
-        elif self.__bottom_right_tile(tile.x, tile.y) is not None and self.__bottom_right_tile(tile.x, tile.y).state not in [BLANK_PIECE, tile.state]:
-            return self.__scan_tiles(tile.x, tile.y, tile.state, self.__bottom_right_tile, flip=flip)
-
-        else:
-            return False
+        return False
 
     def __scan_tiles(self, x: int, y: int, piece: str, direction, flip: bool = False):
         tile = direction(x, y)
