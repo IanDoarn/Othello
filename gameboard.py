@@ -251,9 +251,6 @@ class GameBoard(object):
             return self.board_tiles[x + 1][y + 1]
         return None
 
-    def __repr__(self):
-        return str(self.board_tiles)
-
     def __str__(self):
         white_space = ' ' * 3
         board = '    ' + white_space.join([str(x) for x in range(self.MAX_X)]) + '\n'
@@ -264,6 +261,9 @@ class GameBoard(object):
                 board += ' ' * PADDING + "{0!s:2}|".format(tile)
             board += '\n' + '  ' + GRID * len(row) + INTERSECTION + '\n'
         return board
+
+    def __repr__(self):
+        return str(self.board_tiles)
 
 
 class Tile(GameBoard):

@@ -4,7 +4,7 @@ from colorama import init, Fore
 
 
 if __name__ == '__main__':
-    game = GameBoard(dimensions=4)
+    game = GameBoard()
     game.setup()
 
     init(autoreset=True)
@@ -14,8 +14,10 @@ if __name__ == '__main__':
     current_piece = BLACK_PIECE
 
     while game.is_setup:
-        print(Fore.LIGHTGREEN_EX + "Black : {}\tWhite : {}".format(
+        print(Fore.LIGHTGREEN_EX + "Black({}) : {}\tWhite({}) : {}".format(
+            BLACK_PIECE,
             str(game.count_black_tiles),
+            WHITE_PIECE,
             str(game.count_white_tiles)
         ))
         coordinates = input("Enter coordinates for {} piece: ".format(current_piece))
